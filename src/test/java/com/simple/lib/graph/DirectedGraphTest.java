@@ -18,17 +18,13 @@ import static org.junit.Assert.assertThat;
 
 public class DirectedGraphTest extends AbstractGraphTest {
 
-    private static final int INTEGER_THREE = 3;
-
     @Before
     public void init() {
         graph = new DirectedGraph<>();
-        startVertexInGraph = new Vertex<>("start");
-        endVertexInGraph = new Vertex<>("end");
+        optimizedGraph = new DirectedGraph<>();
         graph.addVertex(startVertexInGraph);
         graph.addVertex(endVertexInGraph);
         graph.addEdge(startVertexInGraph, endVertexInGraph);
-        newVertex = new Vertex<>("newVertex");
     }
 
     @Test
@@ -45,9 +41,9 @@ public class DirectedGraphTest extends AbstractGraphTest {
     }
 
     @Test
-    public void shouldReturnListWith2EdgesWhenThereIsDirection() {
-        final Vertex<String> afterStart = new Vertex<>("afterStart");
-        final Vertex<String> beforeEnd = new Vertex<>("beforeEnd");
+    public void shouldReturnListWithThreeEdgesWhenThereIsDirection() {
+        final Vertex<String> afterStart = new Vertex<>(AFTER_START_VERTEX_NAME);
+        final Vertex<String> beforeEnd = new Vertex<>(BEFORE_END_VERTEX_NAME);
         graph = new DirectedGraph<>();
         graph.addVertex(startVertexInGraph);
         graph.addVertex(endVertexInGraph);
@@ -56,8 +52,23 @@ public class DirectedGraphTest extends AbstractGraphTest {
         graph.addEdge(startVertexInGraph, afterStart);
         graph.addEdge(afterStart, beforeEnd);
         graph.addEdge(beforeEnd, endVertexInGraph);
-        endVertexInGraph = new Vertex<>("end");
         final Optional<List<Edge<String>>> path = graph.getPath(startVertexInGraph, endVertexInGraph);
         assertThat(path.map(List::size).orElse(INTEGER_MINUS_ONE), is(INTEGER_THREE));
+    }
+
+    @Test
+    public void shouldReturnOptionalEmptyWhenDirectionIsWrong() {
+        final Vertex<String> afterStart = new Vertex<>(AFTER_START_VERTEX_NAME);
+        final Vertex<String> beforeEnd = new Vertex<>(BEFORE_END_VERTEX_NAME);
+        graph = new DirectedGraph<>();
+        graph.addVertex(startVertexInGraph);
+        graph.addVertex(endVertexInGraph);
+        graph.addVertex(afterStart);
+        graph.addVertex(beforeEnd);
+        graph.addEdge(startVertexInGraph, afterStart);
+        graph.addEdge(beforeEnd, afterStart);
+        graph.addEdge(beforeEnd, endVertexInGraph);
+        final Optional<List<Edge<String>>> path = graph.getPath(startVertexInGraph, endVertexInGraph);
+        assertThat(path.isPresent(), is(FALSE));
     }
 }

@@ -1,6 +1,5 @@
 package com.simple.lib.graph;
 
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.simple.lib.Vertex;
@@ -12,20 +11,49 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Deque;
+import java.util.LinkedList;
+
+
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * The type Abstract graph.
+ *
+ * @param <T> the type parameter
+ */
 public abstract class AbstractGraph<T> implements Graph<T> {
-    protected final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    public static final String THE_INPUT_VERTEX_IS_NULL = "The input vertex is null";
-    public static final String THE_INPUT_VERTICES_CANNOT_BE_NULL = "The input vertices cannot be null";
-    public static final String GRAPH_DOESNT_CONTAIN_ONE_OF_INPUT_VERTICES = "Can not add new edge graph doesn't contain one of input vertices";
+    /**
+     * The constant logger.
+     */
+    private final static Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    /**
+     * The constant THE_INPUT_VERTEX_IS_NULL.
+     */
+    static final String THE_INPUT_VERTEX_IS_NULL = "The input vertex is null";
+    /**
+     * The constant THE_INPUT_VERTICES_CANNOT_BE_NULL.
+     */
+    static final String THE_INPUT_VERTICES_CANNOT_BE_NULL = "The input vertices cannot be null";
+    /**
+     * The constant GRAPH_DOESNT_CONTAIN_ONE_OF_INPUT_VERTICES.
+     */
+    static final String GRAPH_DOESNT_CONTAIN_ONE_OF_INPUT_VERTICES = "Can not add new edge graph doesn't contain one of input vertices";
 
-    private Set<Vertex<T>> vertices;
-    private Set<Edge<T>> edges;
+    private final Set<Vertex<T>> vertices;
+    private final Set<Edge<T>> edges;
 
+    /**
+     * Instantiates a new Abstract graph.
+     */
     public AbstractGraph() {
         this.vertices = new HashSet<>();
         this.edges = new HashSet<>();
@@ -59,6 +87,13 @@ public abstract class AbstractGraph<T> implements Graph<T> {
         }
     }
 
+    /**
+     * Create edge edge.
+     *
+     * @param vertexFrom the vertex from
+     * @param vertexTo   the vertex to
+     * @return the edge
+     */
     protected abstract Edge<T> createEdge(Vertex<T> vertexFrom, Vertex<T> vertexTo);
 
     @Override
@@ -79,10 +114,10 @@ public abstract class AbstractGraph<T> implements Graph<T> {
                 final Map<Vertex<T>, Edge<T>> neighboursWithEdges = getNeighboursMap(currentVertex);
                 neighboursWithEdges.keySet().removeAll(setOfVisited);
 
-                for (Vertex<T> tVertex : neighboursWithEdges.keySet()) {
-                    final Edge<T> edge = neighboursWithEdges.get(tVertex);
-                    final List<Edge<T>> previousEdgesOfStartVertex = resultedMap.getOrDefault(edge.getStartVertex(tVertex), ImmutableList.of());
-                    resultedMap.merge(tVertex, ListUtils.sum(previousEdgesOfStartVertex, ImmutableList.of(edge)), (edgesPrevious, edgesNew) -> getBestEdgeList(from, edgesPrevious, edgesNew));
+                for (Vertex<T> neighbourVertex : neighboursWithEdges.keySet()) {
+                    final Edge<T> edge = neighboursWithEdges.get(neighbourVertex);
+                    final List<Edge<T>> previousEdgesOfStartVertex = resultedMap.getOrDefault(edge.getStartVertex(neighbourVertex), ImmutableList.of());
+                    resultedMap.merge(neighbourVertex, ListUtils.sum(previousEdgesOfStartVertex, ImmutableList.of(edge)), (edgesPrevious, edgesNew) -> getBestEdgeList(from, edgesPrevious, edgesNew));
                 }
 
                 neighboursWithEdges.keySet().forEach(vertexes::push);
@@ -95,8 +130,7 @@ public abstract class AbstractGraph<T> implements Graph<T> {
     private List<Edge<T>> getBestEdgeList(Vertex<T> from, List<Edge<T>> edgesPrevious, List<Edge<T>> edgesNew) {
         if (edgesPrevious.stream().anyMatch(previousEdge -> previousEdge.doesEdgeContainProperVertex(from))) {
             return edgesPrevious.size() > edgesNew.size() ? edgesNew : edgesPrevious;
-        }
-        else return edgesNew;
+        } else return edgesNew;
     }
 
     private Map<Vertex<T>, Edge<T>> getNeighboursMap(Vertex<T> currentVertex) {

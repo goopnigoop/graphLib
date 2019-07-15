@@ -12,13 +12,13 @@ import java.util.Objects;
 public abstract class AbstractEdge<T> implements Edge<T> {
 
     /**
-     * The Vertex start.
+     * The start vertex.
      */
-    protected Vertex<T> vertexStart;
+    protected final Vertex<T> vertexStart;
     /**
-     * The Vertex end.
+     * The end vertex.
      */
-    protected Vertex<T> vertexEnd;
+    protected final Vertex<T> vertexEnd;
 
     /**
      * Instantiates a new Abstract edge.
@@ -33,7 +33,7 @@ public abstract class AbstractEdge<T> implements Edge<T> {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName()+
+        return getClass().getSimpleName() +
                 "{" +
                 "vertexStart=" + vertexStart +
                 ", vertexEnd=" + vertexEnd +

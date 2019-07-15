@@ -11,7 +11,10 @@ import com.simple.lib.edge.AbstractEdge;
 public class DirectedEdge<T> extends AbstractEdge<T> {
 
     /**
-     * Instantiates a new Directed edge.
+     * Instantiates a new Directed edge,
+     * for directed edge its important
+     * to put start and end vertices
+     * on proper positions
      *
      * @param vertex    the vertex
      * @param vertexEnd the vertex end

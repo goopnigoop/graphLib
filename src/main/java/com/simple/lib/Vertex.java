@@ -4,14 +4,10 @@ import java.util.Objects;
 
 public class Vertex<T> {
 
-    private T value;
+    private final T value;
 
     public Vertex(T value) {
         this.value = value;
-    }
-
-    public T getValue() {
-        return value;
     }
 
     @Override
