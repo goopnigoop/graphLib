@@ -24,12 +24,12 @@ public class DirectedEdge<T> extends AbstractEdge<T> {
     }
 
     @Override
-    public Vertex<T> getStartVertex(Vertex<T> endVertex) {
+    public Vertex<T> getOppositeOrStartVertex(Vertex<T> endVertex) {
         return vertexStart;
     }
 
     @Override
-    public Vertex<T> getEndVertex(Vertex<T> startVertex) {
+    public Vertex<T> getOppositeOrEndVertex(Vertex<T> startVertex) {
         return vertexEnd;
     }
 

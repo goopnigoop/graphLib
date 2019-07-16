@@ -116,7 +116,7 @@ public abstract class AbstractGraph<T> implements Graph<T> {
 
                 for (Vertex<T> neighbourVertex : neighboursWithEdges.keySet()) {
                     final Edge<T> edge = neighboursWithEdges.get(neighbourVertex);
-                    final List<Edge<T>> previousEdgesOfStartVertex = resultedMap.getOrDefault(edge.getStartVertex(neighbourVertex), ImmutableList.of());
+                    final List<Edge<T>> previousEdgesOfStartVertex = resultedMap.getOrDefault(edge.getOppositeOrStartVertex(neighbourVertex), ImmutableList.of());
                     resultedMap.merge(neighbourVertex, ListUtils.sum(previousEdgesOfStartVertex, ImmutableList.of(edge)), (edgesPrevious, edgesNew) -> getBestEdgeList(from, edgesPrevious, edgesNew));
                 }
 
@@ -136,7 +136,7 @@ public abstract class AbstractGraph<T> implements Graph<T> {
     private Map<Vertex<T>, Edge<T>> getNeighboursMap(Vertex<T> currentVertex) {
         return edges.stream()
                 .filter(edge -> edge.doesEdgeContainProperVertex(currentVertex))
-                .collect(Collectors.toMap(o -> o.getEndVertex(currentVertex), Function.identity()));
+                .collect(Collectors.toMap(o -> o.getOppositeOrEndVertex(currentVertex), Function.identity()));
     }
 
     private boolean doesGraphContainsBothVertices(Vertex<T> from, Vertex<T> to) {

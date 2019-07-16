@@ -11,22 +11,24 @@ import com.simple.lib.Vertex;
 public interface Edge<T> {
 
     /**
-     * Gets start vertex after invoke of check method
+     * Gets start vertex or opposite for directed version
+     * after invoke of check method
      * {@link com.simple.lib.edge.Edge#doesEdgeContainProperVertex(com.simple.lib.Vertex)}.
      *
      * @param endVertex the end vertex
      * @return the start vertex
      */
-    Vertex<T> getStartVertex(Vertex<T> endVertex);
+    Vertex<T> getOppositeOrStartVertex(Vertex<T> endVertex);
 
     /**
-     * Gets end vertex after invoke of check method
+     * Gets end vertex or opposite for directed version
+     * after invoke of check method
      * {@link com.simple.lib.edge.Edge#doesEdgeContainProperVertex(com.simple.lib.Vertex)}.
      *
      * @param startVertex the start vertex
      * @return the end vertex
      */
-    Vertex<T> getEndVertex(Vertex<T> startVertex);
+    Vertex<T> getOppositeOrEndVertex(Vertex<T> startVertex);
 
     /**
      * Check whether edge contains proper vertex.
